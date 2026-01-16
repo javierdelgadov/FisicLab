@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Laboratorio Virtual – Péndulo y Masa–Resorte</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="dot"></div>
+
+    <div>
+      <div class="title">INSTITUCIÓN EDUCATIVA JULIA RESTREPO</div>
+      <div class="subtitle">LABORATORIO VIRTUAL</div>
+      <div class="subtitle">Mg. Héctor Javier Delgado V. · Físico.</div>
+      <div class="subtitle">Péndulo simple · Masa–Resorte (grado 11)</div>
+    </div>
+  </div>
+
+  <div class="top-actions">
+    <button class="btn ghost" id="btnFull" title="Pantalla completa">⛶</button>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- LADO IZQUIERDO: SIMULACIÓN -->
+  <section class="simArea">
+    <div class="tabs">
+      <button class="tab active" id="tabPendulo">Péndulo</button>
+      <button class="tab" id="tabResorte">Masa–Resorte</button>
+    </div>
+
+    <div class="simCard">
+      <canvas id="sim"></canvas>
+
+      <div class="simOverlay">
+        <div class="simControls">
+          <button class="btn primary" id="playToggle">
+            <span id="playIco">▶</span>
+            <span id="playText">Iniciar</span>
+          </button>
+          <button class="btn" id="reset">↻ Reset</button>
+
+          <div class="toggles">
+            <label class="chk"><input type="checkbox" id="chkValues" checked> Valores</label>
+            <label class="chk"><input type="checkbox" id="chkGuide" checked> Guía</label>
+            <label class="chk"><input type="checkbox" id="chkTrail"> Trazo</label>
+            <label class="chk"><input type="checkbox" id="chkRuler" checked> Regla</label>
+            <label class="chk"><input type="checkbox" id="chkProtractor"> Transportador</label>
+            <label class="chk"><input type="checkbox" id="chkEnergy" checked> Energía</label>
+          </div>
+        </div>
+
+        <div class="hint" id="dragHint">🖱️ En pausa: arrastra la masa del péndulo para fijar el ángulo inicial</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CENTRO: GRÁFICA Y DATOS -->
+  <section class="midArea">
+    <div class="midHeader">
+      <div class="midTitle">Registro y gráfica</div>
+      <div class="midTools">
+        <label class="small">Variable</label>
+        <select id="plotVar"></select>
+      </div>
+    </div>
+
+    <div class="plotCard">
+      <canvas id="plot"></canvas>
+      <div class="plotNote" id="plotNote">Gráfica: — vs t</div>
+    </div>
+
+    <div class="dataCard">
+      <div class="dataTop">
+        <div class="dataTitle">Tabla de datos (últimos 30)</div>
+        <div class="dataBtns">
+          <label class="chk"><input type="checkbox" id="chkAutoRecord"> Auto</label>
+          <button class="btn" id="btnTakeData">📍 Tomar dato</button>
+          <button class="btn" id="btnClearData">🧹 Limpiar</button>
+          <button class="btn" id="btnExportCSV">⬇ CSV</button>
+        </div>
+      </div>
+
+      <div class="tableWrap">
+        <table class="dataTable">
+          <thead>
+            <tr>
+              <th>t (s)</th>
+              <th id="colMain">—</th>
+              <th>Ec (J)</th>
+              <th>Ep (J)</th>
+            </tr>
+          </thead>
+          <tbody id="dataBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- DERECHA: CONTROLES + LECTURAS -->
+  <section class="sideArea">
+    <div class="panelCard">
+      <div class="panelHead">
+        <div class="panelTitle" id="panelTitle">Controles</div>
+      </div>
+      <div class="panelBody" id="panel"></div>
+    </div>
+
+    <div class="panelCard">
+      <div class="panelHead">
+        <div class="panelTitle">Lecturas</div>
+      </div>
+      <div class="panelBody">
+        <div id="readout" class="readout"></div>
+
+        <div class="miniStats">
+          <div class="stat">
+            <div class="k">T promedio</div>
+            <div class="v" id="Tavg">—</div>
+          </div>
+          <div class="stat">
+            <div class="k">g estimada</div>
+            <div class="v" id="gEst">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panelCard" id="energyPanel">
+      <div class="panelHead">
+        <div class="panelTitle">Energía</div>
+      </div>
+      <div class="panelBody">
+        <div class="bars">
+          <div class="barRow">
+            <div class="lbl">Ep</div>
+            <div class="bar"><div class="fill ep" id="barEp"></div></div>
+            <div class="val" id="valEp">0 J</div>
+          </div>
+          <div class="barRow">
+            <div class="lbl">Ec</div>
+            <div class="bar"><div class="fill ec" id="barEc"></div></div>
+            <div class="val" id="valEc">0 J</div>
+          </div>
+          <div class="barRow">
+            <div class="lbl">Em</div>
+            <div class="bar"><div class="fill em" id="barEm"></div></div>
+            <div class="val" id="valEm">0 J</div>
+          </div>
+        </div>
+
+        <div class="smallNote">
+          Puedes ocultar/mostrar energía con la casilla “Energía”.
+          (Ep: potencial · Ec: cinética · Em: total)
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

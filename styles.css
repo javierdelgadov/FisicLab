@@ -1,0 +1,423 @@
+:root{
+  --bg: #eaf4ff;
+
+  /* ✅ tarjetas un poco menos blancas */
+  --card: rgba(248,251,255,0.94);
+
+  --shadow: 0 10px 24px rgba(31,42,58,.12);
+  --ink: #1f2a3a;
+  --muted: rgba(31,42,58,.65);
+  --line: rgba(31,42,58,.14);
+  --blue: #5f96ff;
+  --mint: #5fd8b4;
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, sans-serif;
+
+  /* ✅ Fondo pastel suave (no encandila) */
+  background: radial-gradient(
+    circle at top,
+    #f7fbff 0%,
+    #e6f0fa 55%,
+    #dce9f7 100%
+  );
+
+  color: var(--ink);
+}
+
+/* ✅ TOPBAR: crece y NO corta texto */
+.topbar{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+
+  padding:10px 16px;
+  background: rgba(248,251,255,0.92);
+  border-bottom:1px solid var(--line);
+  backdrop-filter: blur(10px);
+
+  height:auto;
+  min-height:56px;
+  overflow: visible;
+}
+
+.brand{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  min-width:0;
+}
+
+.dot{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background: linear-gradient(135deg, var(--blue), var(--mint));
+  box-shadow: 0 6px 16px rgba(95,150,255,.25);
+  margin-top:4px;
+  flex:0 0 auto;
+}
+
+/* ✅ permitir salto de línea */
+.title, .subtitle{
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  word-break: break-word;
+}
+
+.title{
+  font-weight:900;
+  letter-spacing:.2px;
+  font-size:16px;
+  line-height:1.15;
+}
+
+.subtitle{
+  font-size:12px;
+  color: var(--muted);
+  margin-top:2px;
+  line-height:1.15;
+}
+
+.top-actions{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  flex:0 0 auto;
+}
+
+.btn{
+  border:none;
+  cursor:pointer;
+  padding:10px 12px;
+  border-radius:12px;
+  background: rgba(31,42,58,.08);
+  color: var(--ink);
+  font-weight:800;
+}
+.btn:hover{ background: rgba(31,42,58,.12); }
+
+.btn.primary{
+  background: linear-gradient(135deg, rgba(95,150,255,.95), rgba(95,216,180,.85));
+  color:white;
+  box-shadow: 0 10px 18px rgba(95,150,255,.20);
+}
+
+.btn.ghost{
+  background: rgba(31,42,58,.06);
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+}
+
+/* ====== LAYOUT ====== */
+.layout{
+  height: calc(100% - 56px);
+  display:grid;
+  grid-template-columns: 1.35fr 1fr 0.95fr;
+  gap:12px;
+  padding:12px;
+}
+@media (max-width: 1100px){
+  .layout{ grid-template-columns: 1fr; height:auto; }
+}
+
+/* ====== TABS ====== */
+.tabs{
+  display:flex;
+  gap:8px;
+  margin-bottom:10px;
+}
+.tab{
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background: rgba(248,251,255,.88);
+  cursor:pointer;
+  font-weight:800;
+}
+.tab.active{
+  background: linear-gradient(135deg, rgba(95,150,255,.18), rgba(95,216,180,.16));
+  border-color: rgba(95,150,255,.35);
+}
+
+/* ====== CARDS ====== */
+.simCard, .panelCard, .plotCard, .dataCard{
+  background: var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow: var(--shadow);
+  overflow:hidden;
+}
+
+.simCard{
+  position:relative;
+  height:100%;
+  min-height:420px;
+}
+
+#sim{
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+/* ====== OVERLAY ====== */
+.simOverlay{
+  position:absolute;
+  left:12px;
+  right:12px;
+  bottom:12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  pointer-events:none;
+}
+
+.simControls{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background: rgba(248,251,255,.92);
+  pointer-events:auto;
+}
+
+.toggles{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:flex-end;
+}
+
+.chk{
+  font-size:12px;
+  color: var(--muted);
+  display:flex;
+  align-items:center;
+  gap:6px;
+  user-select:none;
+}
+.chk input{ transform: translateY(1px); }
+
+/* ✅ HINT FLOTANTE: NO empuja botones, NO estorba clicks */
+.hint{
+  position:absolute;
+  left:12px;
+  right:12px;
+  bottom:70px;         /* queda arriba del panel de botones */
+  z-index:5;
+
+  padding:8px 12px;
+  border-radius:14px;
+  background: rgba(248,251,255,.92);
+  border:1px dashed rgba(95,150,255,.35);
+  color: rgba(31,42,58,.75);
+  font-size:12px;
+
+  pointer-events:none; /* ✅ no bloquea clic */
+}
+
+/* ====== MID AREA ====== */
+.midArea{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  min-height:420px;
+}
+.midHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 12px;
+  background: rgba(248,251,255,.80);
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow: var(--shadow);
+}
+.midTitle{ font-weight:900; }
+.small{ font-size:12px; color: var(--muted); }
+
+#plotVar{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:10px 10px;
+  background: rgba(248,251,255,.92);
+  font-weight:700;
+}
+
+.plotCard{
+  padding:10px;
+  height:230px;
+}
+#plot{
+  width:100%;
+  height:170px;
+  display:block;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background: rgba(248,251,255,.92);
+}
+.plotNote{
+  margin-top:8px;
+  font-size:12px;
+  color: var(--muted);
+}
+
+.dataCard{
+  padding:10px;
+  flex:1;
+  min-height:180px;
+}
+.dataTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+}
+.dataTitle{ font-weight:900; }
+.dataBtns{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.tableWrap{
+  border:1px solid var(--line);
+  border-radius:14px;
+  overflow:auto;
+  max-height:280px;
+  background: rgba(248,251,255,.92);
+}
+
+.dataTable{
+  width:100%;
+  border-collapse: collapse;
+  font-size:12px;
+}
+.dataTable th, .dataTable td{
+  padding:8px 10px;
+  border-bottom:1px solid rgba(31,42,58,.08);
+  text-align:right;
+}
+.dataTable th{
+  background: rgba(95,150,255,.08);
+}
+
+/* ====== SIDE AREA ====== */
+.sideArea{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  min-height:420px;
+}
+
+.panelHead{
+  padding:12px;
+  border-bottom:1px solid var(--line);
+  background: linear-gradient(135deg, rgba(248,251,255,.86), rgba(223,243,255,.70));
+}
+.panelTitle{ font-weight:900; }
+.panelBody{ padding:12px; }
+
+.readout{
+  font-size:12px;
+  color: rgba(31,42,58,.85);
+  background: rgba(223,243,255,.45);
+  border:1px dashed rgba(95,150,255,.35);
+  border-radius:14px;
+  padding:10px;
+  min-height:90px;
+}
+
+/* ====== CONTROLES PANEL ====== */
+.ctrl{
+  margin-bottom:12px;
+  background: rgba(223,243,255,.55);
+  border:1px solid rgba(31,42,58,.10);
+  border-radius:14px;
+  padding:10px;
+}
+.ctrl label{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:8px;
+  font-size:12px;
+  color: rgba(31,42,58,.80);
+}
+.ctrl label span{ font-weight:800; }
+.ctrl label b{ color: rgba(31,42,58,.70); }
+
+.ctrl input[type="range"], .ctrl select{ width:100%; }
+.ctrl select{
+  padding:10px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background: rgba(248,251,255,.92);
+  font-weight:700;
+}
+
+/* ====== MINI STATS ====== */
+.miniStats{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+  margin-top:10px;
+}
+.stat{
+  background: rgba(248,251,255,.92);
+  border:1px solid rgba(31,42,58,.10);
+  border-radius:14px;
+  padding:10px;
+}
+.stat .k{ font-size:12px; color: var(--muted); font-weight:800; }
+.stat .v{ font-size:14px; font-weight:900; margin-top:4px; }
+
+/* ====== ENERGY ====== */
+.bars{ display:flex; flex-direction:column; gap:10px; }
+.barRow{ display:grid; grid-template-columns: 30px 1fr 64px; gap:10px; align-items:center; }
+.barRow .lbl{ font-weight:900; font-size:12px; color: rgba(31,42,58,.8); }
+.barRow .val{ text-align:right; font-size:12px; color: rgba(31,42,58,.75); font-weight:900; }
+
+.bar{
+  height:12px;
+  border-radius:10px;
+  background: rgba(31,42,58,.08);
+  overflow:hidden;
+  border:1px solid rgba(31,42,58,.10);
+}
+.fill{ height:100%; width:0%; border-radius:10px; }
+.fill.ep{ background: rgba(255,197,92,.85); }
+.fill.ec{ background: rgba(95,150,255,.85); }
+.fill.em{ background: rgba(95,216,180,.85); }
+
+.smallNote{
+  margin-top:10px;
+  font-size:12px;
+  color: var(--muted);
+  line-height:1.35;
+}
+
+/* ✅ Mobile */
+@media (max-width: 560px){
+  .topbar{ padding:10px 12px; }
+  .title{ font-size:14px; }
+  .subtitle{ font-size:11px; }
+  .btn.ghost{ width:40px; height:40px; }
+}
