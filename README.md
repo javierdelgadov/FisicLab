@@ -102,3 +102,5 @@ Puede ser usado y adaptado libremente en contextos escolares, citando la autorí
 ---
 
 ✝️ *“La ciencia no se opone a la fe; ambas buscan la verdad.”*
+Activando GitHub Pages
+
