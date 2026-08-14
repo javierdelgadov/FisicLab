@@ -1,169 +1,107 @@
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Laboratorio Virtual – Péndulo y Masa–Resorte</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Laboratorio Virtual Física 10.º</title><style>
+:root{
+ --bg:#f4f7fb;--card:#fff;--ink:#152238;--muted:#657287;--blue:#2055c7;
+ --teal:#0a8588;--gold:#d58513;--line:#d9e2ef;--soft:#edf3ff;--green:#198754;
+}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(135deg,#173b82,#0a8588);color:white;padding:24px 18px}
+.wrap{max-width:1180px;margin:auto;padding:18px} header .wrap{padding:0}
+h1{margin:0 0 5px;font-size:clamp(1.55rem,4vw,2.4rem)} h2,h3{margin-top:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 5px 18px rgba(25,50,90,.06)}
+.student{display:grid;grid-template-columns:1.6fr .65fr 1fr;gap:12px}
+label{font-weight:700;font-size:.9rem} input,select,textarea{font:inherit;width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;background:white}
+textarea{min-height:70px;resize:vertical} nav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+button{font:inherit;border:0;border-radius:10px;padding:10px 14px;font-weight:750;cursor:pointer}
+.tab{background:#e7eefc;color:#173b82}.tab.active{background:#173b82;color:white}
+.btn{background:var(--blue);color:#fff}.btn2{background:var(--teal);color:#fff}.ghost{background:white;border:1px solid var(--line);color:var(--ink)}
+.panel{display:none}.panel.active{display:block}.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}
+.controls{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0}.metric{background:var(--soft);padding:11px;border-radius:12px;text-align:center}.metric b{display:block;font-size:1.15rem;margin-top:3px}
+.formulas{background:#f9fbff;border:1px solid #cdd9eb;border-radius:12px;padding:12px;margin:10px 0}.formula{font-family:Cambria,Georgia,serif;font-size:1.05rem;margin:5px 0}
+.challenge{background:#eefafa;border-left:4px solid var(--teal);padding:12px;border-radius:10px;margin:10px 0}.note{background:#fff7e8;border-left:4px solid var(--gold);padding:12px;border-radius:10px;margin:10px 0}
+.question{border:1px dashed #b9c6d8;border-radius:10px;padding:10px;margin:10px 0;background:#fcfdff}
+canvas{display:block;width:100%;height:260px;background:#f8fbff;border:1px solid var(--line);border-radius:13px}
+table{width:100%;border-collapse:collapse;font-size:.9rem} th,td{border-bottom:1px solid var(--line);padding:8px;text-align:center} th{background:#f2f5fa}
+.badge{display:inline-block;background:#e6efff;color:#174da8;padding:5px 9px;border-radius:999px;font-size:.8rem;font-weight:750}
+.small{color:var(--muted);font-size:.84rem}.bars{display:grid;grid-template-columns:repeat(3,1fr);height:190px;gap:10px;align-items:end;margin:12px 0}.barbox{text-align:center;height:100%;display:flex;flex-direction:column;justify-content:flex-end}.bar{width:68%;margin:0 auto;border-radius:10px 10px 3px 3px;min-height:4px;background:linear-gradient(180deg,#2e6de0,#173b82);transition:height .25s}.barbox:nth-child(2) .bar{background:linear-gradient(180deg,#16a1a4,#09686a)}.barbox:nth-child(3) .bar{background:linear-gradient(180deg,#eda33d,#bb6807)}
+footer{text-align:center;padding:20px;color:var(--muted)}
+@media(max-width:850px){.grid{grid-template-columns:1fr}.student{grid-template-columns:1fr}.controls{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}canvas{height:220px}}
+@media print{header,nav,.toolbar,.no-print{display:none!important}.panel{display:block!important;page-break-before:always}.card{box-shadow:none}body{background:white}}
+</style></head><body>
+<header><div class="wrap"><h1>Laboratorio Virtual de Física · Grado 10.º</h1><p>Cinemática: MRU · MRUA · Caída libre</p></div></header>
+<main class="wrap">
+<section class="card"><div class="student"><div><label>Nombre</label><input id="studentName"></div><div><label>Curso</label><input value="10.º" readonly></div><div><label>Código de sesión</label><input id="sessionCode" readonly></div></div><p class="small">Registra este código en tu guía. Primero predice y calcula; después usa la simulación para comprobar.</p></section>
+<nav class="no-print"><button class="tab active" data-target="mru">MRU</button><button class="tab" data-target="mrua">MRUA</button><button class="tab" data-target="fall">Caída libre</button></nav>
 
-<header class="topbar">
-  <div class="brand">
-    <div class="dot"></div>
+<section id="mru" class="panel active"><div class="grid">
+<div class="card"><span class="badge">Pestaña 1</span><h2>Movimiento Rectilíneo Uniforme</h2>
+<div class="formulas"><b>Formulario rápido</b><div class="formula">v = d / t</div><div class="formula">d = v · t</div><div class="formula">t = d / v</div><div class="small">v: velocidad (m/s) · d: distancia (m) · t: tiempo (s)</div></div>
+<div class="controls"><div><label>Distancia (m)</label><input id="mruD" type="number" value="100" min="1"></div><div><label>Velocidad (m/s)</label><input id="mruV" type="number" value="10" min=".1" step=".1"></div></div>
+<div class="toolbar"><button class="btn" onclick="runMRU()">▶ Simular</button><button class="btn2" onclick="randomMRU()">🎲 Nuevo reto</button><button class="ghost" onclick="logMRU()">＋ Registrar</button></div>
+<div class="challenge" id="mruChallenge"><b>Reto inicial:</b> calcula el tiempo que tardará el móvil antes de iniciar la simulación.</div>
+<div class="metrics"><div class="metric">Distancia<b id="mruRD">100 m</b></div><div class="metric">Velocidad<b id="mruRV">10 m/s</b></div><div class="metric">Tiempo<b id="mruRT">—</b></div></div>
+<canvas id="mruCanvas" width="800" height="260"></canvas></div>
+<div class="card"><h3>Preguntas vinculadas con la guía</h3>
+<div class="question"><b>Antes:</b> si mantienes la distancia y duplicas la velocidad, ¿qué crees que ocurrirá con el tiempo?<textarea></textarea></div>
+<table><thead><tr><th>#</th><th>d (m)</th><th>v (m/s)</th><th>t (s)</th></tr></thead><tbody id="mruTable"></tbody></table>
+<div class="question">¿Tu cálculo previo coincidió con la simulación? Explica cualquier diferencia.<textarea></textarea></div>
+<div class="question">Describe con tus palabras la relación entre distancia, velocidad y tiempo.<textarea></textarea></div>
+</div></div></section>
 
-    <div>
-      <div class="title">INSTITUCIÓN EDUCATIVA JULIA RESTREPO</div>
-      <div class="subtitle">LABORATORIO VIRTUAL</div>
-      <div class="subtitle">Mg. Héctor Javier Delgado V. · Físico.</div>
-      <div class="subtitle">Péndulo simple · Masa–Resorte (grado 11)</div>
-    </div>
-  </div>
+<section id="mrua" class="panel"><div class="grid">
+<div class="card"><span class="badge">Pestaña 2</span><h2>Movimiento Rectilíneo Uniformemente Acelerado</h2>
+<div class="formulas"><b>Formulario rápido</b><div class="formula">v<sub>f</sub> = v<sub>0</sub> + a·t</div><div class="formula">X = v<sub>0</sub>·t + ½a·t²</div><div class="formula">v<sub>f</sub>² = v<sub>0</sub>² + 2a·X</div><div class="small">v₀: velocidad inicial · vf: velocidad final · a: aceleración (m/s²) · t: tiempo · X: desplazamiento</div></div>
+<div class="controls"><div><label>v₀ (m/s)</label><input id="aV0" type="number" value="2" step=".5"></div><div><label>a (m/s²)</label><input id="aA" type="number" value="2" step=".5"></div><div><label>t (s)</label><input id="aT" type="number" value="8" min="1"></div></div>
+<div class="toolbar"><button class="btn" onclick="runA()">▶ Simular</button><button class="btn2" onclick="randomA()">🎲 Nuevo reto</button><button class="ghost" onclick="logA()">＋ Registrar</button></div>
+<div class="challenge" id="aChallenge"><b>Reto inicial:</b> calcula primero vf y X; después comprueba.</div>
+<div class="metrics"><div class="metric">Velocidad final<b id="aRV">—</b></div><div class="metric">Desplazamiento<b id="aRX">—</b></div><div class="metric">Aceleración<b id="aRA">2 m/s²</b></div></div>
+<canvas id="aCanvas" width="800" height="260"></canvas></div>
+<div class="card"><h3>Preguntas vinculadas con la guía</h3>
+<div class="question"><b>Predicción:</b> ¿qué ocurrirá con vf si duplicas a y mantienes v₀ y t?<textarea></textarea></div>
+<table><thead><tr><th>#</th><th>v₀</th><th>a</th><th>t</th><th>vf</th><th>X</th></tr></thead><tbody id="aTable"></tbody></table>
+<div class="question">“Una aceleración de 2 m/s² significa recorrer 2 m cada segundo”. ¿Es correcta esa afirmación? Justifica con los datos del experimento.<textarea></textarea></div>
+<div class="question">Compara el cálculo manual de vf y X con el resultado de la aplicación.<textarea></textarea></div>
+</div></div></section>
 
-  <div class="top-actions">
-    <button class="btn ghost" id="btnFull" title="Pantalla completa">⛶</button>
-  </div>
-</header>
+<section id="fall" class="panel"><div class="grid">
+<div class="card"><span class="badge">Pestaña 3</span><h2>Caída libre</h2>
+<div class="formulas"><b>Formulario rápido — caída desde el reposo</b><div class="formula">h = ½g·t²</div><div class="formula">t = √(2h/g)</div><div class="formula">v<sub>f</sub> = g·t</div><div class="formula">v<sub>f</sub>² = 2g·h</div><div class="small">h: altura · g: gravedad (9,8 m/s²) · t: tiempo · vf: velocidad final</div></div>
+<div class="controls"><div><label>Altura (m)</label><input id="fH" type="number" value="20" min="1"></div><div><label>Masa (kg)</label><input id="fM" type="number" value="1" min=".1" step=".1"></div><div><label>g (m/s²)</label><input id="fG" type="number" value="9.8" step=".1"></div></div>
+<div class="toolbar"><button class="btn" onclick="runF()">▼ Soltar</button><button class="btn2" onclick="randomF()">🎲 Nuevo reto</button><button class="ghost" onclick="logF()">＋ Registrar</button></div>
+<div class="challenge" id="fChallenge"><b>Reto inicial:</b> calcula el tiempo y la velocidad final antes de soltar el objeto.</div>
+<div class="metrics"><div class="metric">Tiempo<b id="fRT">—</b></div><div class="metric">Velocidad final<b id="fRV">—</b></div><div class="metric">Masa<b id="fRM">1 kg</b></div></div>
+<canvas id="fCanvas" width="800" height="260"></canvas></div>
+<div class="card"><h3>Preguntas vinculadas con la guía</h3>
+<div class="question"><b>Predicción:</b> dos objetos de distinta masa se dejan caer desde la misma altura. En este modelo sin resistencia del aire, ¿cuál llega primero?<textarea></textarea></div>
+<table><thead><tr><th>#</th><th>h</th><th>m</th><th>t</th><th>vf</th></tr></thead><tbody id="fTable"></tbody></table>
+<div class="question">Cambia únicamente la masa y repite. ¿Cambian t o vf? Usa los datos para responder.<textarea></textarea></div>
+<div class="question">Cambia únicamente la altura. ¿Cómo afecta al tiempo y a la velocidad final?<textarea></textarea></div>
+</div></div></section>
 
-<main class="layout">
+<section class="card" style="margin-top:16px"><h3>Cierre</h3><div class="question">¿Qué predicción resultó equivocada y qué evidencia te hizo cambiar de idea?<textarea></textarea></div><div class="question">Si utilizaste IA, explica para qué la usaste y qué parte del razonamiento realizaste tú.<textarea></textarea></div><div class="toolbar"><button class="btn" onclick="window.print()">🖨️ Imprimir / PDF</button><button class="ghost" onclick="copySummary(logs10)">📋 Copiar resultados</button></div></section>
+</main><footer>Laboratorio Virtual de Física · Grado 10.º</footer>
+<script>
+const $=id=>document.getElementById(id);
+const rnd=(a,b,step=1)=>+(Math.round((a+Math.random()*(b-a))/step)*step).toFixed(2);
+const logs={};
+function code(prefix){return `${prefix}-${new Date().getFullYear()}-${Math.floor(10000+Math.random()*89999)}`}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.target).classList.add('active')});
+function render(id,rows){$(id).innerHTML=rows.map((r,i)=>`<tr><td>${i+1}</td>${r.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}
+function road(canvas,x=70,label=''){const c=canvas.getContext('2d'),w=canvas.width,h=canvas.height;c.clearRect(0,0,w,h);c.fillStyle='#eaf4ff';c.fillRect(0,0,w,h);c.fillStyle='#8bbd6b';c.fillRect(0,h*.62,w,h*.38);c.fillStyle='#555';c.fillRect(35,h*.57,w-70,70);c.strokeStyle='white';c.lineWidth=4;c.setLineDash([22,18]);c.beginPath();c.moveTo(45,h*.705);c.lineTo(w-45,h*.705);c.stroke();c.setLineDash([]);c.fillStyle='#2055c7';c.fillRect(x,h*.55,60,28);c.fillRect(x+12,h*.515,32,18);c.fillStyle='#111';c.beginPath();c.arc(x+13,h*.665,9,0,Math.PI*2);c.arc(x+48,h*.665,9,0,Math.PI*2);c.fill();c.fillStyle='#17324f';c.font='18px sans-serif';c.fillText(label,40,36)}
+function animateRoad(canvas,duration,label){let s=null;function f(ts){if(!s)s=ts;const p=Math.min(1,(ts-s)/duration);road(canvas,70+p*(canvas.width-170),label);if(p<1)requestAnimationFrame(f)}requestAnimationFrame(f)}
+function copySummary(logset){let s=`Estudiante: ${$('studentName').value||'Sin nombre'}\nCódigo: ${$('sessionCode').value}\n\n`;Object.entries(logset).forEach(([k,v])=>{s+=k.toUpperCase()+':\n';v.forEach((r,i)=>s+=`${i+1}. ${r.join(' | ')}\n`);s+='\n'});navigator.clipboard?.writeText(s).then(()=>alert('Resumen copiado.')).catch(()=>alert(s))}
 
-  <!-- LADO IZQUIERDO: SIMULACIÓN -->
-  <section class="simArea">
-    <div class="tabs">
-      <button class="tab active" id="tabPendulo">Péndulo</button>
-      <button class="tab" id="tabResorte">Masa–Resorte</button>
-    </div>
-
-    <div class="simCard">
-      <canvas id="sim"></canvas>
-
-      <div class="simOverlay">
-        <div class="simControls">
-          <button class="btn primary" id="playToggle">
-            <span id="playIco">▶</span>
-            <span id="playText">Iniciar</span>
-          </button>
-          <button class="btn" id="reset">↻ Reset</button>
-
-          <div class="toggles">
-            <label class="chk"><input type="checkbox" id="chkValues" checked> Valores</label>
-            <label class="chk"><input type="checkbox" id="chkGuide" checked> Guía</label>
-            <label class="chk"><input type="checkbox" id="chkTrail"> Trazo</label>
-            <label class="chk"><input type="checkbox" id="chkRuler" checked> Regla</label>
-            <label class="chk"><input type="checkbox" id="chkProtractor"> Transportador</label>
-            <label class="chk"><input type="checkbox" id="chkEnergy" checked> Energía</label>
-          </div>
-        </div>
-
-        <div class="hint" id="dragHint">🖱️ En pausa: arrastra la masa del péndulo para fijar el ángulo inicial</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CENTRO: GRÁFICA Y DATOS -->
-  <section class="midArea">
-    <div class="midHeader">
-      <div class="midTitle">Registro y gráfica</div>
-      <div class="midTools">
-        <label class="small">Variable</label>
-        <select id="plotVar"></select>
-      </div>
-    </div>
-
-    <div class="plotCard">
-      <canvas id="plot"></canvas>
-      <div class="plotNote" id="plotNote">Gráfica: — vs t</div>
-    </div>
-
-    <div class="dataCard">
-      <div class="dataTop">
-        <div class="dataTitle">Tabla de datos (últimos 30)</div>
-        <div class="dataBtns">
-          <label class="chk"><input type="checkbox" id="chkAutoRecord"> Auto</label>
-          <button class="btn" id="btnTakeData">📍 Tomar dato</button>
-          <button class="btn" id="btnClearData">🧹 Limpiar</button>
-          <button class="btn" id="btnExportCSV">⬇ CSV</button>
-        </div>
-      </div>
-
-      <div class="tableWrap">
-        <table class="dataTable">
-          <thead>
-            <tr>
-              <th>t (s)</th>
-              <th id="colMain">—</th>
-              <th>Ec (J)</th>
-              <th>Ep (J)</th>
-            </tr>
-          </thead>
-          <tbody id="dataBody"></tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <!-- DERECHA: CONTROLES + LECTURAS -->
-  <section class="sideArea">
-    <div class="panelCard">
-      <div class="panelHead">
-        <div class="panelTitle" id="panelTitle">Controles</div>
-      </div>
-      <div class="panelBody" id="panel"></div>
-    </div>
-
-    <div class="panelCard">
-      <div class="panelHead">
-        <div class="panelTitle">Lecturas</div>
-      </div>
-      <div class="panelBody">
-        <div id="readout" class="readout"></div>
-
-        <div class="miniStats">
-          <div class="stat">
-            <div class="k">T promedio</div>
-            <div class="v" id="Tavg">—</div>
-          </div>
-          <div class="stat">
-            <div class="k">g estimada</div>
-            <div class="v" id="gEst">—</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="panelCard" id="energyPanel">
-      <div class="panelHead">
-        <div class="panelTitle">Energía</div>
-      </div>
-      <div class="panelBody">
-        <div class="bars">
-          <div class="barRow">
-            <div class="lbl">Ep</div>
-            <div class="bar"><div class="fill ep" id="barEp"></div></div>
-            <div class="val" id="valEp">0 J</div>
-          </div>
-          <div class="barRow">
-            <div class="lbl">Ec</div>
-            <div class="bar"><div class="fill ec" id="barEc"></div></div>
-            <div class="val" id="valEc">0 J</div>
-          </div>
-          <div class="barRow">
-            <div class="lbl">Em</div>
-            <div class="bar"><div class="fill em" id="barEm"></div></div>
-            <div class="val" id="valEm">0 J</div>
-          </div>
-        </div>
-
-        <div class="smallNote">
-          Puedes ocultar/mostrar energía con la casilla “Energía”.
-          (Ep: potencial · Ec: cinética · Em: total)
-        </div>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<script src="app.js"></script>
-</body>
-</html>
+$('sessionCode').value=code('F10'); const logs10={mru:[],mrua:[],caida:[]};
+function runMRU(){let d=+$('mruD').value,v=+$('mruV').value;if(d<=0||v<=0)return;let t=d/v;$('mruRD').textContent=d+' m';$('mruRV').textContent=v+' m/s';$('mruRT').textContent=t.toFixed(2)+' s';animateRoad($('mruCanvas'),Math.min(5000,1000+t*220),`MRU · t=${t.toFixed(2)} s`)}
+function randomMRU(){let d=rnd(40,180,10),t=rnd(5,15,1);$('mruD').value=d;$('mruV').value='';$('mruChallenge').innerHTML=`<b>Reto:</b> recorre ${d} m en aproximadamente ${t} s. Calcula la velocidad necesaria.`}
+function logMRU(){let d=+$('mruD').value,v=+$('mruV').value;if(!d||!v)return;let t=d/v;logs10.mru.push([d,v,t.toFixed(2)]);render('mruTable',logs10.mru)}
+function runA(){let v0=+$('aV0').value,a=+$('aA').value,t=+$('aT').value;let vf=v0+a*t,x=v0*t+.5*a*t*t;$('aRV').textContent=vf.toFixed(2)+' m/s';$('aRX').textContent=x.toFixed(2)+' m';$('aRA').textContent=a+' m/s²';animateRoad($('aCanvas'),Math.min(5000,1200+t*170),`MRUA · vf=${vf.toFixed(2)} m/s · X=${x.toFixed(2)} m`)}
+function randomA(){let v0=rnd(0,8,1),a=rnd(1,5,.5),t=rnd(4,10,1);$('aV0').value=v0;$('aA').value=a;$('aT').value=t;$('aChallenge').innerHTML=`<b>Reto:</b> v₀=${v0} m/s, a=${a} m/s², t=${t} s. Calcula vf y X.`}
+function logA(){let v0=+$('aV0').value,a=+$('aA').value,t=+$('aT').value,vf=v0+a*t,x=v0*t+.5*a*t*t;logs10.mrua.push([v0,a,t,vf.toFixed(2),x.toFixed(2)]);render('aTable',logs10.mrua)}
+function drawF(y=45,label=''){const cv=$('fCanvas'),c=cv.getContext('2d'),w=cv.width,h=cv.height;c.clearRect(0,0,w,h);c.fillStyle='#eaf4ff';c.fillRect(0,0,w,h);c.fillStyle='#8d949d';c.fillRect(50,35,160,h-65);c.fillStyle='#8bbd6b';c.fillRect(0,h-30,w,30);c.fillStyle='#d64c3f';c.beginPath();c.arc(w*.68,y,16,0,Math.PI*2);c.fill();c.fillStyle='#17324f';c.font='18px sans-serif';c.fillText(label,240,35)}
+function runF(){let h=+$('fH').value,m=+$('fM').value,g=+$('fG').value,t=Math.sqrt(2*h/g),v=g*t;$('fRT').textContent=t.toFixed(2)+' s';$('fRV').textContent=v.toFixed(2)+' m/s';$('fRM').textContent=m+' kg';let s=null,cv=$('fCanvas');function f(ts){if(!s)s=ts;let p=Math.min(1,(ts-s)/Math.min(4200,900+t*480));drawF(45+p*(cv.height-90),`h=${h} m · m=${m} kg`);if(p<1)requestAnimationFrame(f)}requestAnimationFrame(f)}
+function randomF(){let h=rnd(10,100,5),m=rnd(.5,8,.5);$('fH').value=h;$('fM').value=m;$('fChallenge').innerHTML=`<b>Reto:</b> masa=${m} kg desde h=${h} m. Calcula t y vf antes de soltar.`}
+function logF(){let h=+$('fH').value,m=+$('fM').value,g=+$('fG').value,t=Math.sqrt(2*h/g),v=g*t;logs10.caida.push([h,m,t.toFixed(2),v.toFixed(2)]);render('fTable',logs10.caida)}
+road($('mruCanvas'),70,'MRU');road($('aCanvas'),70,'MRUA');drawF();
+</script></body></html>
